@@ -2,6 +2,15 @@
 package com.elorrieta.storeapi.controller;
 
 import com.elorrieta.storeapi.model.Product;
+import com.elorrieta.storeapi.dto.ProductDTO;
+import com.elorrieta.storeapi.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
 import com.elorrieta.storeapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +31,41 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.findAll();
-        return ResponseEntity.ok(products);
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+    	  List<ProductDTO> products = productService.findAll()
+    		        .stream()
+    		        .map(p -> new ProductDTO(
+    	                    p.getProductId(),
+    	                    p.getAmount(),
+    	                    p.getCost(),
+    	                    p.getEnabled(),
+    	                    p.getImage(),
+    	                    p.getMinimumAmount(),
+    	                    p.getName(),
+    	                    p.getRetailPrice(),
+    	                    p.getSeason()
+    	                ))
+    	                .toList();
+    	  return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         Optional<Product> product = productService.findById(id);
-        return product.map(ResponseEntity::ok)
-                      .orElseGet(() -> ResponseEntity.notFound().build());
+        return product.map(p -> ResponseEntity.ok(new ProductDTO(
+                    p.getProductId(),
+                    p.getAmount(),
+                    p.getCost(),
+                    p.getEnabled(),
+                    p.getImage(),
+                    p.getMinimumAmount(),
+                    p.getName(),
+                    p.getRetailPrice(),
+                    p.getSeason()
+                )))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
