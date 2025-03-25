@@ -1,4 +1,4 @@
-package model;
+package com.elorrieta.storeapi.model;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
