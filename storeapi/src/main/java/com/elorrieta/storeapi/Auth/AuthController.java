@@ -24,7 +24,7 @@ public class AuthController {
 	
 	@GetMapping
     public ResponseEntity<TokenResponse> testingCall() {
-    	System.out.println("ENTERIN AUTHENTICATION");
+    	System.out.println("ENTERIN AUTHENTICATION TEST");
         final TokenResponse token = new TokenResponse("test token", "Another test");
         return ResponseEntity.ok(token);
     }
@@ -41,7 +41,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> authenticate(@RequestBody final LoginRequest request) {
-    	System.out.println("ENTERIN AUTHENTICATION");
+    	System.out.println("ENTERIN AUTHENTICATION LOGIN");
         final TokenResponse token = service.login(request);
         return ResponseEntity.ok(token);
     }
