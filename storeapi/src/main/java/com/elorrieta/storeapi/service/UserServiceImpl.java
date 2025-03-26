@@ -4,6 +4,7 @@ package com.elorrieta.storeapi.service;
 import com.elorrieta.storeapi.dto.UserDto;
 import com.elorrieta.storeapi.model.User;
 import com.elorrieta.storeapi.repository.UserRepository;
+import com.elorrieta.storeapi.security.LoginRequest;
 import com.elorrieta.storeapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,12 +56,33 @@ public class UserServiceImpl implements UserService {
                 .orElse(null);
     }
 
+    
+   
     @Override
     public UserDto save(UserDto userDto) {
         User user = convertToEntity(userDto);
         return convertToDto(userRepository.save(user));
     }
+    
+    //sobrecarga del metodoguardar, para poder usarlo mientras probando el registro jwt
+//    @Override
+//    public User save (User user) {
+//       
+//        return (userRepository.save(user));
+//    }
+    
+    //in further implementacion, will have to consider the encription, already in 
 
+    
+    //    @Override
+//    public User valid_login(LoginRequest loginRequest) {
+//        return userRepository.findByEmail(loginRequest.email())
+//                .filter(user -> user.getPass().equals(loginRequest.password()))
+//                .orElse(null);
+//    }
+
+
+    
     @Override
     public UserDto update(Long id, UserDto userDto) {
         userDto.setUserId(id);

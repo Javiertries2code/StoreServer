@@ -2,13 +2,18 @@ package com.elorrieta.storeapi.model;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
  * The persistent class for the users database table.
  * 
  */
+@Builder
 @Entity
 @Table(name="users")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
@@ -28,6 +33,7 @@ public class User implements Serializable {
 
 	private String name;
 
+	@JsonIgnore
 	private String pass;
 
 	private String rol;
@@ -141,6 +147,11 @@ public class User implements Serializable {
 		sale.setUser(null);
 
 		return sale;
+	}
+
+	public static Object builder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

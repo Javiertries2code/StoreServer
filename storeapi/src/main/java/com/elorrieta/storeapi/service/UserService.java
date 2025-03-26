@@ -1,6 +1,9 @@
 package com.elorrieta.storeapi.service;
 
 import com.elorrieta.storeapi.dto.UserDto;
+import com.elorrieta.storeapi.model.User;
+import com.elorrieta.storeapi.security.LoginRequest;
+
 import java.util.List;
 
 public interface UserService {
@@ -9,4 +12,6 @@ public interface UserService {
     UserDto save(UserDto userDto);
     UserDto update(Long id, UserDto userDto);
     void delete(Long id);
+   // User valid_login(LoginRequest loginRequest);
+    
 }
