@@ -27,21 +27,35 @@ public class AuthService {
 	@Autowired
 	private TokenManager tokenManager;
 
-//	
-//	  public TokenResponse register(RegisterRequest request) {
+	
+	  public TokenResponse register(RegisterRequest request) {
+		  
+		  User user = new User();  // Crear instancia de User
+		    
+		    user.setName(request.name());
+		    user.setEmail(request.email());
+		    user.setPass(passwordEncoder.encode(request.password())); 
+		    user.setEnabled((byte) 1); 
+		    user.setRol("USER");  
 //	        var user = User.builder()
-//	                .name(request.name())
+//	        		.name(request.name())
 //	                .email(request.email())
-//	                .password(request.password())
+//	                .pass(passwordEncoder.encode(request.password()))
+//	                .enabled((byte) 1) 
+//	                .rol("USER") 
 //	                .build();
-//
-//	        var savedUser = userRepository.save(convertToDto( user));
-//	        var jwtToken = jwtService.generateToken(savedUser);
-//	        var refreshToken = jwtService.generateRefreshToken(savedUser);
-//	        saveUserToken(savedUser, jwtToken);
-//	        tokenManager.addToken(token);
-//	    }
-//	
+	        
+	        var savedUser = userRepository.save( user);
+	        var jwtToken = jwtService.generateToken(savedUser);
+	        var refreshToken = jwtService.generateRefreshToken(savedUser);
+	        //saveUserToken(savedUser, jwtToken);
+	
+	    	tokenManager.addToken(jwtToken);
+			tokenManager.addRefreshToken(refreshToken);
+			return (new TokenResponse(jwtToken, refreshToken));
+
+	    }
+	  
 	public TokenResponse login(LoginRequest request) {
 		
     	System.out.println("ENTERIN login");

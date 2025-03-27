@@ -33,11 +33,11 @@ public class AuthController {
 //   private final AuthService service:
     //the point of all this, is to use anotacions instead of new instances, but it throusghs error
     
-//    @PostMapping("/register")
-//    public ResponseEntity<TokenResponse> register(@RequestBody final RegisterRequest request) {
-//        final TokenResponse token = service.register(request);
-//        return ResponseEntity.ok(token);
-//    }
+    @PostMapping("/register")
+    public ResponseEntity<TokenResponse> register(@RequestBody final RegisterRequest request) {
+        final TokenResponse token = service.register(request);
+        return ResponseEntity.ok(token);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> authenticate(@RequestBody final LoginRequest request) {

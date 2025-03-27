@@ -12,6 +12,5 @@ public interface UserService {
     UserDto save(UserDto userDto);
     UserDto update(Long id, UserDto userDto);
     void delete(Long id);
-   // User valid_login(LoginRequest loginRequest);
     
 }

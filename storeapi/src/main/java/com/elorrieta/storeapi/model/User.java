@@ -2,7 +2,11 @@ package com.elorrieta.storeapi.model;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -14,6 +18,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * 
  */
 @Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="users")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
@@ -149,9 +157,6 @@ public class User implements Serializable {
 		return sale;
 	}
 
-	public static Object builder() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }

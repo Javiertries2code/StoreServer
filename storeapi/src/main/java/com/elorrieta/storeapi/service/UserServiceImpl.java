@@ -41,6 +41,8 @@ public class UserServiceImpl implements UserService {
         user.setRol(dto.getRol());
         return user;
     }
+    
+    
 
     @Override
     public List<UserDto> findAll() {
@@ -57,19 +59,22 @@ public class UserServiceImpl implements UserService {
     }
 
     
-   
+   /**
+    * returning a useDTO, but aint sure why atm... 
+    *  useless for validation or returning it, that is not aske
+    */
     @Override
     public UserDto save(UserDto userDto) {
         User user = convertToEntity(userDto);
         return convertToDto(userRepository.save(user));
     }
     
-    //sobrecarga del metodoguardar, para poder usarlo mientras probando el registro jwt
-//    @Override
-//    public User save (User user) {
-//       
-//        return (userRepository.save(user));
-//    }
+  //  sobrecarga del metodoguardar, para poder usarlo mientras probando el registro jwt
+   // @Override
+    public User save(User user) {
+       
+        return (userRepository.save(user));
+    }
     
     //in further implementacion, will have to consider the encription, already in 
 
