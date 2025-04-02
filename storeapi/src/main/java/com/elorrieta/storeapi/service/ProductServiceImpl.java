@@ -74,4 +74,15 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
         productRepository.deleteById(id);
     }
+
+    @Override
+    public void incrementAmount(Long id) {
+        productRepository.incrementAmount(id);
+    }
+
+    @Override
+    public void decrementAmount(Long id) {
+        productRepository.decrementAmount(id);
+    }
+
 }

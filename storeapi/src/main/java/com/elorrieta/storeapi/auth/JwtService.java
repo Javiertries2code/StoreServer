@@ -1,4 +1,4 @@
-package com.elorrieta.storeapi.Auth;
+package com.elorrieta.storeapi.auth;
 
 
 import io.jsonwebtoken.Jwts;

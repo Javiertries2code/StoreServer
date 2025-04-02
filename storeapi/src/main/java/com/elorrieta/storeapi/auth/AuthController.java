@@ -1,4 +1,4 @@
-package com.elorrieta.storeapi.Auth;
+package com.elorrieta.storeapi.auth;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +24,6 @@ public class AuthController {
 	
 	@GetMapping
     public ResponseEntity<TokenResponse> testingCall() {
-    	System.out.println("ENTERIN AUTHENTICATION TEST");
         final TokenResponse token = new TokenResponse("test token", "Another test");
         return ResponseEntity.ok(token);
     }
