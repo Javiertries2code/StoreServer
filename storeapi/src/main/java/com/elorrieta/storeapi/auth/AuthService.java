@@ -52,7 +52,7 @@ public class AuthService {
 	
 	    	tokenManager.addToken(jwtToken);
 			tokenManager.addRefreshToken(refreshToken);
-			return (new TokenResponse(jwtToken, refreshToken));
+			return (new TokenResponse(savedUser.getEmail(),savedUser.getName() ,jwtToken, refreshToken));
 
 	    }
 	  
@@ -73,7 +73,7 @@ public class AuthService {
 
 		tokenManager.addToken(jwtToken);
 		tokenManager.addRefreshToken(refreshToken);
-		return (new TokenResponse(jwtToken, refreshToken));
+		return (new TokenResponse( validUSer.getEmail(),validUSer.getName() , jwtToken, refreshToken));
 
 	}
 
