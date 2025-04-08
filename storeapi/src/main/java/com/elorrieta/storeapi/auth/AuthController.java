@@ -24,7 +24,7 @@ public class AuthController {
 	
 	@GetMapping
     public ResponseEntity<TokenResponse> testingCall() {
-        final TokenResponse token = new TokenResponse("test token", "Another test");
+        final TokenResponse token = new TokenResponse("test token", "Another test", "test3", "test4");
         return ResponseEntity.ok(token);
     }
 	

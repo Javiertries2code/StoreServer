@@ -2,67 +2,37 @@ package com.elorrieta.storeapi.model;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The persistent class for the product_invoice database table.
- * 
  */
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name="product_invoice")
-@NamedQuery(name="ProductInvoice.findAll", query="SELECT p FROM ProductInvoice p")
+@Table(name = "product_invoice")
+@NamedQuery(name = "ProductInvoice.findAll", query = "SELECT p FROM ProductInvoice p")
 public class ProductInvoice implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="detail_id")
-	private long detailId;
+    @Id
+    @Column(name = "detail_id")
+    private long detailId;
 
-	private int quantity;
+    private int quantity;
 
-	//bi-directional many-to-one association to Invoice
-	@ManyToOne
-	@JoinColumn(name="invoice_id")
-	private Invoice invoice;
+    @ManyToOne
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 
-	//bi-directional many-to-one association to Product
-	@ManyToOne
-	@JoinColumn(name="product_id")
-	private Product product;
-
-	public ProductInvoice() {
-	}
-
-	public long getDetailId() {
-		return this.detailId;
-	}
-
-	public void setDetailId(long detailId) {
-		this.detailId = detailId;
-	}
-
-	public int getQuantity() {
-		return this.quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public Invoice getInvoice() {
-		return this.invoice;
-	}
-
-	public void setInvoice(Invoice invoice) {
-		this.invoice = invoice;
-	}
-
-	public Product getProduct() {
-		return this.product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }
