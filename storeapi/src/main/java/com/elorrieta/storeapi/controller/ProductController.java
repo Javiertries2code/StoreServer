@@ -2,6 +2,7 @@ package com.elorrieta.storeapi.controller;
 
 import com.elorrieta.storeapi.dto.ProductDTO;
 import com.elorrieta.storeapi.service.ProductService;
+import com.elorrieta.storeapi.service.StockStatusChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +12,14 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
+    private final StockStatusChecker stockStatusChecker;
+
     @Autowired
     private ProductService productService;
+
+    ProductController(StockStatusChecker stockStatusChecker) {
+        this.stockStatusChecker = stockStatusChecker;
+    }
 
     @GetMapping
     public List<ProductDTO> getAllProducts() {
@@ -48,7 +55,7 @@ public class ProductController {
 
     @PostMapping("/minus/{id}")
     public void subtractAmount(@PathVariable Long id) {
-        productService.decrementAmount(id);
+        stockStatusChecker.checkAndDecrement(id);
     }
     
 }
