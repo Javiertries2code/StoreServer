@@ -51,7 +51,7 @@ public class EmailService {
     
     @PostConstruct
     public void init() {
-        log.info("✅ EmailService cargado correctamente");
+        log.info(" EmailService cargado correctamente");
     }
 
     

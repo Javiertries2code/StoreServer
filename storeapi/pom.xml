@@ -51,12 +51,21 @@
    <artifactId>jakarta.mail</artifactId>
    <version>2.0.1</version>
   </dependency>
+  
+		<!-- Tinker, crypto secutity google-->
+
+<dependency>
+    <groupId>com.google.crypto.tink</groupId>
+    <artifactId>tink</artifactId>
+    <version>1.6.1</version>
+</dependency>
 
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		
 
 		<!-- Lombok Esta es la version de pluggin instalado --> 
 <dependency>
