@@ -46,11 +46,27 @@ public class ProductController {
 
 		return productService.findById(id);
 	}
-
+	
+	@PostMapping(value = "", consumes = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<?> createEncrypted(@RequestBody String encryptedBody) {
+	    try {
+	        String decryptedJson = cryptoHelper.decrypt(encryptedBody);
+	       
+	       
+	       ProductDTO product = new ObjectMapper().readValue(decryptedJson, ProductDTO.class);
+	       pd.pM(decryptedJson,  product.getName());
+	       return ResponseEntity.ok(productService.save(product));
+	    } catch (Exception e) {
+	        log.error("Error al desencriptar createProduct", e);
+	        return ResponseEntity.badRequest().body("Error al procesar el cuerpo");
+	    }
+	}
+	
+/*
 	@PostMapping
 	public ProductDTO createProduct(@RequestBody ProductDTO ProductDTO) {
 		return productService.save(ProductDTO);
-	}
+	}*/
 
 	@PutMapping(value = "/{id}", consumes = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<?> updateEncrypted(@PathVariable Long id, @RequestBody String encryptedBody) {
