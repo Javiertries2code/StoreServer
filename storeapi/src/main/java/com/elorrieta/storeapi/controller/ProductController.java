@@ -57,16 +57,10 @@ public class ProductController {
 
 		try {
 			String decryptedJson = cryptoHelper.decrypt(encryptedBody);
-			log.debug("📥 JSON desencriptado: {}", decryptedJson);
+			log.debug(" JSON desencriptado: {}", decryptedJson);
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			ProductDTO product = objectMapper.readValue(decryptedJson, ProductDTO.class);
-			
-			pd.pM("createProduct -- product received in controller\n", product.getName());
-			pd.pM("createProduct -- product received in controller\n", product.getMinimumAmount());
-
-			pd.pM("createProduct -- product received in controller\n", product.getAmount());
-
 			
 			ProductDTO updated = productService.update(id, product);
 			

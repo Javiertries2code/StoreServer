@@ -27,13 +27,13 @@ public class StockStatusChecker {
     	
         log.info("📦 Entrando en checkAndDecrement con ID: {}", productId);
 
-        // Step 1: Decrement
+        //  Decrement
         productService.decrementAmount(productId);
 
-        // Step 2: Get updated product
+        //  Get updated product
         ProductDTO product = productService.findById(productId);
 
-        // Step 3: Compare amount and minimumAmount
+        // StCompare amount and minimumAmount
         if (product.getAmount() == product.getMinimumAmount()) {
             try {
                 emailService.sendMail(

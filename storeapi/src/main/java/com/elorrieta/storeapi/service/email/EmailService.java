@@ -117,21 +117,7 @@ public class EmailService {
 		// And here it goes...
 		Transport.send(message);
 	}
-/*
-	public static void main(String[] args) {
-		String user = "sender@gmail.com";
-		String pass = "The Generated Pass";
-		String to = "receiver@gmail.com";
-		String subject = "Mensaje de prueba";
-		String message = "Correo de vital importancia";
-		EmailService emailService = new EmailService(user, pass, "smtp.gmail.com", 465);
-		try {
-			emailService.sendMail(to, subject, message);
-			System.out.println("Ok, mail sent!");
-		} catch (MessagingException e) {
-			System.out.println("Doh! " + e.getMessage());
-		}
-	}*/
+
 }
 
 
