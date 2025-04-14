@@ -1,12 +1,13 @@
-
 package com.elorrieta.storeapi.service;
 
 import com.elorrieta.storeapi.dto.UserDto;
+import com.elorrieta.storeapi.exception.ApiException;
+import com.elorrieta.storeapi.exception.ErrorCode;
 import com.elorrieta.storeapi.model.User;
 import com.elorrieta.storeapi.repository.UserRepository;
 import com.elorrieta.storeapi.security.LoginRequest;
-import com.elorrieta.storeapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,61 +42,77 @@ public class UserServiceImpl implements UserService {
         user.setRol(dto.getRol());
         return user;
     }
-    
-    
 
     @Override
     public List<UserDto> findAll() {
-        return userRepository.findAll().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        try {
+            return userRepository.findAll().stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.DB_ERROR);
+        }
     }
 
     @Override
     public UserDto findById(Long id) {
-        return userRepository.findById(id)
-                .map(this::convertToDto)
-                .orElse(null);
+        try {
+            return userRepository.findById(id)
+                    .map(this::convertToDto)
+                    .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+        } catch (ApiException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.DB_ERROR);
+        }
     }
 
-    
-   /**
-    * returning a useDTO, but aint sure why atm... 
-    *  useless for validation or returning it, that is not aske
-    */
     @Override
     public UserDto save(UserDto userDto) {
-        User user = convertToEntity(userDto);
-        return convertToDto(userRepository.save(user));
+        try {
+            User user = convertToEntity(userDto);
+            return convertToDto(userRepository.save(user));
+        } catch (DataIntegrityViolationException e) {
+            throw new ApiException(ErrorCode.DUPLICATE_USER);
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.DB_ERROR);
+        }
     }
-    
-  //  sobrecarga del metodoguardar, para poder usarlo mientras probando el registro jwt
-   // @Override
+
+    // Sobrecarga útil en ciertos casos como registro desde lógica JWT
     public User save(User user) {
-       
-        return (userRepository.save(user));
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new ApiException(ErrorCode.DUPLICATE_USER);
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.DB_ERROR);
+        }
     }
-    
-    //in further implementacion, will have to consider the encription, already in 
 
-    
-    //    @Override
-//    public User valid_login(LoginRequest loginRequest) {
-//        return userRepository.findByEmail(loginRequest.email())
-//                .filter(user -> user.getPass().equals(loginRequest.password()))
-//                .orElse(null);
-//    }
-
-
-    
     @Override
     public UserDto update(Long id, UserDto userDto) {
+        if (!userRepository.existsById(id)) {
+            throw new ApiException(ErrorCode.USER_NOT_FOUND);
+        }
         userDto.setUserId(id);
-        return save(userDto);
+        try {
+            return save(userDto);
+        } catch (ApiException e) {
+            if (e.getErrorCode() == ErrorCode.DUPLICATE_USER) throw e;
+            throw new ApiException(ErrorCode.PRODUCT_NOT_UPDATED); // Puedes crear un código específico para usuarios si lo prefieres
+        }
     }
 
     @Override
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        if (!userRepository.existsById(id)) {
+            throw new ApiException(ErrorCode.USER_NOT_FOUND);
+        }
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.PRODUCT_NOT_DELETED); // Igual que antes, puedes añadir uno tipo USER_NOT_DELETED
+        }
     }
 }

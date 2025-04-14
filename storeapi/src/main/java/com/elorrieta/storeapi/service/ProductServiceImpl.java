@@ -48,16 +48,26 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAll() {
-        return productRepository.findAll().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        try {
+            return productRepository.findAll().stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.DB_ERROR);
+        }
     }
 
     @Override
     public ProductDTO findById(Long id) {
-        return productRepository.findById(id)
-                .map(this::convertToDto)
-                .orElseThrow(() -> new ApiException(ErrorCode.PRODUCT_NOT_FOUND));
+        try {
+            return productRepository.findById(id)
+                    .map(this::convertToDto)
+                    .orElseThrow(() -> new ApiException(ErrorCode.PRODUCT_NOT_FOUND));
+        } catch (ApiException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.DB_ERROR);
+        }
     }
 
     @Override
@@ -83,6 +93,8 @@ public class ProductServiceImpl implements ProductService {
         } catch (ApiException e) {
             if (e.getErrorCode() == ErrorCode.DUPLICATE_PROD) throw e;
             throw new ApiException(ErrorCode.PRODUCT_NOT_UPDATED);
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.DB_ERROR);
         }
     }
 
