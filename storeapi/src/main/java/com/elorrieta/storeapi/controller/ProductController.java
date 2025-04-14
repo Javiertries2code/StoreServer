@@ -1,8 +1,11 @@
 package com.elorrieta.storeapi.controller;
 
 import com.elorrieta.storeapi.dto.ProductDTO;
+import com.elorrieta.storeapi.exception.ApiException;
+import com.elorrieta.storeapi.exception.ErrorCode;
 import com.elorrieta.storeapi.helpers.CryptoHelper;
 import com.elorrieta.storeapi.helpers.PrintDebug;
+import com.elorrieta.storeapi.response.ApiResponse;
 import com.elorrieta.storeapi.service.ProductService;
 import com.elorrieta.storeapi.service.StockStatusChecker;
 import com.elorrieta.storeapi.service.email.EmailService;
@@ -35,11 +38,26 @@ public class ProductController {
 		this.stockStatusChecker = stockStatusChecker;
 		this.cryptoHelper = cryptoHelper;
 	}
+	
+    @GetMapping()
+   public ResponseEntity<ApiResponse<List<ProductDTO>>> getAllProducts() {
+       List<ProductDTO> items = productService.findAll();
 
-	@GetMapping
-	public List<ProductDTO> getAllProducts() {
-		return productService.findAll();
-	}
+       ApiResponse<List<ProductDTO>> response = ApiResponse.<List<ProductDTO>>builder()
+           .success(true)
+           .status("success")
+           .message("Products list retrieved successfully")
+           .type("listproduct")
+           .data(items)
+           .build();
+
+       return ResponseEntity.ok(response);
+   }
+
+//	@GetMapping
+//	public List<ProductDTO> getAllProducts() {
+//		return productService.findAll();
+//	}
 
 	@GetMapping("/{id}")
 	public ProductDTO getProductById(@PathVariable Long id) {
@@ -48,7 +66,7 @@ public class ProductController {
 	}
 	
 	@PostMapping(value = "", consumes = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<?> createEncrypted(@RequestBody String encryptedBody) {
+	public ResponseEntity<?> createProduct(@RequestBody String encryptedBody) {
 	    try {
 	        String decryptedJson = cryptoHelper.decrypt(encryptedBody);
 	       
@@ -58,7 +76,7 @@ public class ProductController {
 	       return ResponseEntity.ok(productService.save(product));
 	    } catch (Exception e) {
 	        log.error("Error al desencriptar createProduct", e);
-	        return ResponseEntity.badRequest().body("Error al procesar el cuerpo");
+	        throw new ApiException(ErrorCode.DECRYPTION_ERROR);
 	    }
 	}
 	
@@ -69,7 +87,7 @@ public class ProductController {
 	}*/
 
 	@PutMapping(value = "/{id}", consumes = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<?> updateEncrypted(@PathVariable Long id, @RequestBody String encryptedBody) {
+	public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody String encryptedBody) {
 
 		try {
 			String decryptedJson = cryptoHelper.decrypt(encryptedBody);
@@ -86,7 +104,7 @@ public class ProductController {
 
 		} catch (Exception e) {
 			log.error("Error procesando mensaje encriptado", e);
-			return ResponseEntity.badRequest().body("Error al desencriptar o procesar el cuerpo");
+	        throw new ApiException(ErrorCode.DECRYPTION_ERROR);
 		}
 	}
 /*

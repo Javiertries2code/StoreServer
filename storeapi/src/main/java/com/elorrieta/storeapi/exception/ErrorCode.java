@@ -15,9 +15,24 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND("PROD_404", "Product not found"),
     RESOURCE_NOT_FOUND("GEN_404", "Resource not found"),
 
+    //405 NOT CREATED
+    PRODUCT_NOT_CREATED("PROD_405", "Product not created"),
+    
+    //406 NOT UPDATED
+    PRODUCT_NOT_UPDATED("PROD_406", "Product not updated"),
+    
+    //407 NOT DELETED
+    PRODUCT_NOT_DELETED("PROD_407", "Product not deleted"),
+    
     // 409 - Conflictos
     DUPLICATE_USER("USR_409", "User already exists"),
     DUPLICATE_ENTRY("GEN_409", "Duplicate entry"),
+    DUPLICATE_PROD("GEN_409", "Duplicate product"),
+    
+    DECRYPTION_ERROR("CRYPTO_410", "Error decrypting request body"),
+    ENCRYPTION_ERROR("CRYPTO_410", "Error encrypting response body"),
+
+
 
     // 500 - Internos
     INTERNAL_ERROR("INT_500", "Internal server error"),

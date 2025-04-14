@@ -37,7 +37,7 @@ public class TestController {
         return ResponseEntity.ok(response);
     }
     
-      @GetMapping("/products")
+      @GetMapping("products")
     public ResponseEntity<ApiResponse<List<ProductDTO>>> getAllProducts() {
         List<ProductDTO> items = productService.findAll();
 

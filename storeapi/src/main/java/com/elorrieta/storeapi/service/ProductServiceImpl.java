@@ -1,10 +1,12 @@
 package com.elorrieta.storeapi.service;
 
 import com.elorrieta.storeapi.dto.ProductDTO;
+import com.elorrieta.storeapi.exception.ApiException;
+import com.elorrieta.storeapi.exception.ErrorCode;
 import com.elorrieta.storeapi.model.Product;
 import com.elorrieta.storeapi.repository.ProductRepository;
-import com.elorrieta.storeapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,34 +57,68 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO findById(Long id) {
         return productRepository.findById(id)
                 .map(this::convertToDto)
-                .orElse(null);
+                .orElseThrow(() -> new ApiException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        Product product = convertToEntity(productDTO);
-        return convertToDto(productRepository.save(product));
+        try {
+            Product product = convertToEntity(productDTO);
+            return convertToDto(productRepository.save(product));
+        } catch (DataIntegrityViolationException e) {
+            throw new ApiException(ErrorCode.DUPLICATE_PROD);
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.DB_ERROR);
+        }
     }
 
     @Override
     public ProductDTO update(Long id, ProductDTO productDTO) {
+        if (!productRepository.existsById(id)) {
+            throw new ApiException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
         productDTO.setProductId(id);
-        return save(productDTO);
+        try {
+            return save(productDTO);
+        } catch (ApiException e) {
+            if (e.getErrorCode() == ErrorCode.DUPLICATE_PROD) throw e;
+            throw new ApiException(ErrorCode.PRODUCT_NOT_UPDATED);
+        }
     }
 
     @Override
     public void delete(Long id) {
-        productRepository.deleteById(id);
+        if (!productRepository.existsById(id)) {
+            throw new ApiException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
+        try {
+            productRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.PRODUCT_NOT_DELETED);
+        }
     }
 
     @Override
     public void incrementAmount(Long id) {
-        productRepository.incrementAmount(id);
+        if (!productRepository.existsById(id)) {
+            throw new ApiException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
+        try {
+            productRepository.incrementAmount(id);
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.PRODUCT_NOT_UPDATED);
+        }
     }
 
     @Override
     public void decrementAmount(Long id) {
-        productRepository.decrementAmount(id);
+        if (!productRepository.existsById(id)) {
+            throw new ApiException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
+        try {
+            productRepository.decrementAmount(id);
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.PRODUCT_NOT_UPDATED);
+        }
     }
-
 }
