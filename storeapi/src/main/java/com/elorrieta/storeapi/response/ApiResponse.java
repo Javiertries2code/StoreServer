@@ -15,4 +15,10 @@ public class ApiResponse<T> {
     private String message;
     private T data;
     private String type;
+
+    @Builder.Default
+    private String accessToken = null;
+
+    @Builder.Default
+    private String refreshToken = null;
 }
