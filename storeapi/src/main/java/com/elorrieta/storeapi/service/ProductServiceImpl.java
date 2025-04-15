@@ -53,6 +53,7 @@ public class ProductServiceImpl implements ProductService {
                     .map(this::convertToDto)
                     .collect(Collectors.toList());
         } catch (Exception e) {
+        	 e.printStackTrace();
             throw new ApiException(ErrorCode.DB_ERROR);
         }
     }
@@ -91,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             return save(productDTO);
         } catch (ApiException e) {
-            if (e.getErrorCode() == ErrorCode.DUPLICATE_PROD) throw e;
+          
             throw new ApiException(ErrorCode.PRODUCT_NOT_UPDATED);
         } catch (Exception e) {
             throw new ApiException(ErrorCode.DB_ERROR);

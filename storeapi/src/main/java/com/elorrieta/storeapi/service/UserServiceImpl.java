@@ -99,8 +99,8 @@ public class UserServiceImpl implements UserService {
         try {
             return save(userDto);
         } catch (ApiException e) {
-            if (e.getErrorCode() == ErrorCode.DUPLICATE_USER) throw e;
-            throw new ApiException(ErrorCode.PRODUCT_NOT_UPDATED); // Puedes crear un código específico para usuarios si lo prefieres
+          
+            throw new ApiException(ErrorCode.USER_NOT_UPDATED); 
         }
     }
 

@@ -1,5 +1,7 @@
 package com.elorrieta.storeapi.interceptor;
 
+import com.elorrieta.storeapi.exception.ApiException;
+import com.elorrieta.storeapi.exception.ErrorCode;
 import com.elorrieta.storeapi.helpers.CryptoHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +50,7 @@ public class EncryptionResponseAdvice implements ResponseBodyAdvice<Object> {
             return encrypted;
         } catch (Exception e) {
             log.error(" Error encrypting response body", e);
-            throw new RuntimeException("Error encrypting response", e);
+            throw new ApiException(ErrorCode.ENCRYPTION_ERROR);
         }
     }
 }

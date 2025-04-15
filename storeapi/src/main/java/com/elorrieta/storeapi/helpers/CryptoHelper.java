@@ -1,5 +1,7 @@
 package com.elorrieta.storeapi.helpers;
 
+import com.elorrieta.storeapi.exception.ApiException;
+import com.elorrieta.storeapi.exception.ErrorCode;
 import com.google.crypto.tink.subtle.AesGcmJce;
 
 import jakarta.annotation.PostConstruct;
@@ -30,7 +32,7 @@ public class CryptoHelper {
 			log.info("🔐 CryptoHelper initialized");
 		} catch (Exception e) {
 			log.error("Error initializing CryptoHelper", e);
-			throw new RuntimeException(e);
+			throw new ApiException(ErrorCode.ENCRYPTION_KEY_ERROR);
 		}
 	}
 
@@ -39,7 +41,7 @@ public class CryptoHelper {
 			byte[] cipher = aead.encrypt(plainText.getBytes(), null);
 			return Base64.getEncoder().encodeToString(cipher);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+	          throw new ApiException(ErrorCode.ENCRYPTION_ERROR);
 		}
 	}
 
@@ -49,7 +51,7 @@ public class CryptoHelper {
 			byte[] plain = aead.decrypt(cipher, null);
 			return new String(plain);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+	          throw new ApiException(ErrorCode.DECRYPTION_ERROR);
 		}
 	}
 }

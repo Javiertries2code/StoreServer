@@ -2,15 +2,22 @@ package com.elorrieta.storeapi.controller;
 
 import com.elorrieta.storeapi.dto.ProductDTO;
 import com.elorrieta.storeapi.dto.UserDto;
+import com.elorrieta.storeapi.exception.ApiException;
+import com.elorrieta.storeapi.exception.ErrorCode;
 import com.elorrieta.storeapi.response.ApiResponse;
 import com.elorrieta.storeapi.service.ProductService;
+
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
@@ -54,10 +61,17 @@ public class TestController {
     
     
   
-	@GetMapping("products/{id}")
-	public ProductDTO getProductById(@PathVariable Long id) {
+      @PostMapping("error/{id}")
+      public ProductDTO getProductById(@PathVariable Long id) {
+          for (ErrorCode code : ErrorCode.values()) {
+  	        log.info(code.getCode());
+              if (Integer.parseInt(code.getCode()) == id) {
+                  throw new ApiException(code);
+              }
+          }
 
-		return productService.findById(id);
-	}
+         
+          throw new ApiException(ErrorCode.UNKNOWN_ERROR);
+      }
     
 }
